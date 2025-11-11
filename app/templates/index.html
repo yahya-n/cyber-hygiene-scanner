@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP Security Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+
+<div class="max-w-6xl mx-auto px-4 py-10">
+
+    <!-- Header Section -->
+    <div class="text-center mb-10">
+        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">
+            Cyber Hygine Analysis Security Scanner 
+            <br>_ 
+             
+        </h1>
+        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+            Comprehensive OWASP Top 10 vulnerability assessment with network scanning and malware detection.
+            <span class="text-red-600 font-semibold">Scan only authorized targets.</span>
+        </p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mb-6 flex justify-center space-x-2">
+        <button onclick="showTab('website')" id="tab-website" class="tab-btn active px-6 py-3 rounded-lg font-semibold transition">
+            🌐 Website/IP Scan
+        </button>
+        <button onclick="showTab('file')" id="tab-file" class="tab-btn px-6 py-3 rounded-lg font-semibold transition">
+            📁 File Scan
+        </button>
+    </div>
+
+    <!-- Website Scan Tab -->
+    <div id="website-tab" class="tab-content">
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <form id="scanForm" class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Target URL or IP Address</label>
+                    <input type="text" id="target"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                           placeholder="https://example.com or 192.168.1.1" required>
+                    <p class="text-xs text-gray-500 mt-1">For domains without protocol, https:// will be added automatically</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-3">Scan Types</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-start p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 hover:shadow-md transition">
+                            <input type="checkbox" name="scan_type" value="owasp" class="mt-1 mr-3 h-5 w-5 text-purple-600" checked>
+                            <div>
+                                <span class="font-semibold text-gray-800">🔒 OWASP Top 10 Scan</span>
+                                <p class="text-sm text-gray-500">Comprehensive vulnerability assessment covering all OWASP Top 10 categories (A01-A10)</p>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-start p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 hover:shadow-md transition">
+                            <input type="checkbox" name="scan_type" value="nmap" class="mt-1 mr-3 h-5 w-5 text-purple-600">
+                            <div>
+                                <span class="font-semibold text-gray-800">🔍 Nmap Vulnerability Scan</span>
+                                <p class="text-sm text-gray-500">Network-level security assessment with CVE detection (requires Nmap installed)</p>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-start p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 hover:shadow-md transition">
+                            <input type="checkbox" name="scan_type" value="virustotal_url" class="mt-1 mr-3 h-5 w-5 text-purple-600">
+                            <div>
+                                <span class="font-semibold text-gray-800">🛡️ VirusTotal URL Scan</span>
+                                <p class="text-sm text-gray-500">Check URL reputation across 70+ antivirus engines (requires API key)</p>
+                            </div>
+                        </label>
+                        
+                        <div class="p-4 border-2 border-blue-200 rounded-lg bg-blue-50">
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <div>
+                                    <span class="font-semibold text-blue-900 text-sm">Recommended: OWASP Scan</span>
+                                    <p class="text-xs text-blue-700 mt-1">Covers SQL injection, XSS, CSRF, authentication issues, and more</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OWASP Coverage Info -->
+                <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg border border-purple-200">
+                    <details class="cursor-pointer">
+                        <summary class="font-semibold text-purple-900 text-sm">📋 OWASP Top 10 Coverage (Click to expand)</summary>
+                        <div class="mt-3 space-y-1 text-xs text-purple-800">
+                            <p>✅ A01:2021 - Broken Access Control</p>
+                            <p>✅ A02:2021 - Cryptographic Failures</p>
+                            <p>✅ A03:2021 - Injection (SQL, XSS, Command)</p>
+                            <p>✅ A04:2021 - Insecure Design (CSRF)</p>
+                            <p>✅ A05:2021 - Security Misconfiguration</p>
+                            <p>✅ A06:2021 - Vulnerable and Outdated Components</p>
+                            <p>✅ A07:2021 - Identification and Authentication Failures</p>
+                            <p>✅ A08:2021 - Software and Data Integrity Failures</p>
+                            <p>✅ A09:2021 - Security Logging and Monitoring Failures</p>
+                            <p>✅ A10:2021 - Server-Side Request Forgery (SSRF)</p>
+                        </div>
+                    </details>
+                </div>
+
+                <button type="submit" id="scanBtn"
+                        class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transform hover:scale-[1.02] transition duration-200 shadow-lg">
+                    🚀 Start Security Scan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- File Scan Tab -->
+    <div id="file-tab" class="tab-content hidden">
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <form id="fileScanForm" class="space-y-6">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-purple-400 transition">
+                    <div class="mb-4">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <label for="fileInput" class="cursor-pointer">
+                        <span class="mt-2 block text-sm font-medium text-gray-900">
+                            Drop file here or click to upload
+                        </span>
+                        <span class="mt-1 block text-xs text-gray-500">
+                            Supported: EXE, DLL, ZIP, APK, PDF, DOC, XLS (Max 32MB)
+                        </span>
+                    </label>
+                    <input type="file" id="fileInput" class="hidden" accept=".exe,.dll,.zip,.pdf,.doc,.docx,.xls,.xlsx,.apk,.jar,.txt,.py,.js">
+                </div>
+                
+                <div id="fileInfo" class="hidden bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm font-medium text-blue-800">Selected file:</p>
+                    <p id="fileName" class="text-sm text-blue-600"></p>
+                </div>
+
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <div class="flex items-start">
+                        <svg class="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <span class="font-semibold text-yellow-900 text-sm">VirusTotal API Required</span>
+                            <p class="text-xs text-yellow-700 mt-1">Set VIRUSTOTAL_API_KEY environment variable. Get your free API key from virustotal.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="fileScanBtn"
+                        class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transform hover:scale-[1.02] transition duration-200 shadow-lg">
+                    🔍 Scan File with VirusTotal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Section -->
+    <div id="loading" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600"></div>
+            <span class="text-lg font-medium text-gray-700">Scanning in progress...</span>
+            <p class="text-sm text-gray-500">This may take 30-60 seconds depending on scan types</p>
+            <div id="scanProgress" class="text-xs text-gray-400 text-center mt-2"></div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" class="hidden bg-white rounded-xl shadow-lg p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-3xl font-bold text-gray-800">📊 Scan Results</h3>
+            <button onclick="resetScan()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-medium transition">
+                🔄 New Scan
+            </button>
+        </div>
+
+        <!-- Security Score -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xl font-semibold text-gray-700">Security Score:</span>
+                <span id="score" class="text-4xl font-extrabold text-purple-600">--</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                <div id="scoreBar" class="h-6 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            </div>
+            <p id="scoreText" class="text-sm text-gray-600 mt-2"></p>
+        </div>
+
+        <!-- Summary Stats -->
+        <div id="summary" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
+
+        <!-- Findings -->
+        <div id="findings" class="space-y-4 mb-8"></div>
+
+        <!-- Download PDF -->
+        <button id="downloadBtn" class="hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition duration-200 shadow-lg">
+            📥 Download PDF Report
+        </button>
+    </div>
+
+</div>
+
+<script>
+// Tab Management
+function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+    document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+// Reset scan
+function resetScan() {
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('scanForm').reset();
+    document.getElementById('fileScanForm').reset();
+    document.getElementById('fileInfo').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// File Input Handler
+document.getElementById('fileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('fileInfo').classList.remove('hidden');
+        document.getElementById('fileName').textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+    }
+});
+
+// Website Scan Form
+document.getElementById('scanForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const target = document.getElementById('target').value.trim();
+    const scanTypes = Array.from(document.querySelectorAll('input[name="scan_type"]:checked'))
+                           .map(cb => cb.value);
+
+    if (scanTypes.length === 0) {
+        alert('⚠️ Please select at least one scan type');
+        return;
+    }
+
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('scanProgress').textContent = 'Initializing scan...';
+
+    try {
+        const response = await fetch('/scan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target, scan_types: scanTypes })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            displayResults(data);
+        } else {
+            alert('❌ Error: ' + (data.error || 'Unknown error occurred'));
+        }
+    } catch (error) {
+        alert('❌ Scan failed: ' + error.message);
+    } finally {
+        document.getElementById('loading').classList.add('hidden');
+    }
+});
+
+// File Scan Form
+document.getElementById('fileScanForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('⚠️ Please select a file to scan');
+        return;
+    }
+
+    if (file.size > 32 * 1024 * 1024) {
+        alert('❌ File too large. Maximum size is 32MB');
+        return;
+    }
+
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('scanProgress').textContent = 'Uploading file to VirusTotal...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch('/scan-file', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            displayResults(data);
+        } else {
+            alert('❌ Error: ' + (data.error || 'Scan failed'));
+        }
+    } catch (error) {
+        alert('❌ Scan failed: ' + error.message);
+    } finally {
+        document.getElementById('loading').classList.add('hidden');
+    }
+});
+
+function displayResults(data) {
+    document.getElementById('results').classList.remove('hidden');
+    const score = data.score || 0;
+    document.getElementById('score').textContent = score + '/100';
+    
+    // Animate score bar
+    setTimeout(() => {
+        document.getElementById('scoreBar').style.width = score + '%';
+    }, 100);
+    
+    // Color score bar based on score
+    const scoreBar = document.getElementById('scoreBar');
+    if (score >= 80) {
+        scoreBar.className = 'h-6 rounded-full transition-all duration-1000 bg-gradient-to-r from-green-400 to-green-600';
+        document.getElementById('scoreText').textContent = '✅ Excellent security posture - minimal vulnerabilities detected';
+    } else if (score >= 60) {
+        scoreBar.className = 'h-6 rounded-full transition-all duration-1000 bg-gradient-to-r from-yellow-400 to-yellow-600';
+        document.getElementById('scoreText').textContent = '⚠️ Moderate security - improvements recommended';
+    } else if (score >= 40) {
+        scoreBar.className = 'h-6 rounded-full transition-all duration-1000 bg-gradient-to-r from-orange-400 to-orange-600';
+        document.getElementById('scoreText').textContent = '⚠️ Poor security - multiple vulnerabilities found';
+    } else {
+        scoreBar.className = 'h-6 rounded-full transition-all duration-1000 bg-gradient-to-r from-red-400 to-red-600';
+        document.getElementById('scoreText').textContent = '❌ Critical security issues - immediate action required';
+    }
+
+    // Display summary stats
+    const summaryDiv = document.getElementById('summary');
+    if (data.summary) {
+        summaryDiv.innerHTML = `
+            <div class="bg-red-50 p-4 rounded-lg border-2 border-red-200">
+                <div class="text-2xl font-bold text-red-600">${data.summary.critical || 0}</div>
+                <div class="text-xs text-red-700 font-medium">Critical</div>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg border-2 border-orange-200">
+                <div class="text-2xl font-bold text-orange-600">${data.summary.high || 0}</div>
+                <div class="text-xs text-orange-700 font-medium">High</div>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200">
+                <div class="text-2xl font-bold text-yellow-600">${data.summary.medium || 0}</div>
+                <div class="text-xs text-yellow-700 font-medium">Medium</div>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                <div class="text-2xl font-bold text-blue-600">${data.summary.low || 0}</div>
+                <div class="text-xs text-blue-700 font-medium">Low</div>
+            </div>
+        `;
+    }
+
+    const findingsDiv = document.getElementById('findings');
+    findingsDiv.innerHTML = '<h4 class="font-bold text-2xl mb-4 text-gray-800">🔍 Detailed Findings:</h4>';
+
+    if (!data.findings || data.findings.length === 0) {
+        findingsDiv.innerHTML += '<div class="bg-green-50 border-2 border-green-200 p-6 rounded-lg text-center"><p class="text-green-700 font-medium text-lg">✅ No significant vulnerabilities detected!</p><p class="text-green-600 text-sm mt-2">Your target appears to have good security hygiene.</p></div>';
+    } else {
+        data.findings.forEach((f, i) => {
+            let severity = f.severity || 'Info';
+            let severityConfig = {
+                'Critical': { color: 'red', icon: '🔴', bg: 'bg-red-50', border: 'border-red-500', text: 'text-red-800' },
+                'High': { color: 'orange', icon: '🟠', bg: 'bg-orange-50', border: 'border-orange-500', text: 'text-orange-800' },
+                'Medium': { color: 'yellow', icon: '🟡', bg: 'bg-yellow-50', border: 'border-yellow-500', text: 'text-yellow-800' },
+                'Low': { color: 'blue', icon: '🔵', bg: 'bg-blue-50', border: 'border-blue-500', text: 'text-blue-800' },
+                'Info': { color: 'gray', icon: 'ℹ️', bg: 'bg-gray-50', border: 'border-gray-500', text: 'text-gray-800' },
+                'Error': { color: 'red', icon: '❌', bg: 'bg-red-50', border: 'border-red-500', text: 'text-red-800' }
+            };
+
+            const config = severityConfig[severity] || severityConfig['Info'];
+            
+            let description = f.description || '';
+            if (typeof description === 'object') {
+                description = JSON.stringify(description, null, 2);
+            }
+            
+            // Highlight CVEs and CWEs
+            description = description.replace(/(CVE-\d{4}-\d{4,7})/g, '<span class="font-bold text-red-600 bg-red-100 px-1 rounded">$1</span>');
+            description = description.replace(/(CWE-\d+)/g, '<span class="font-semibold text-purple-600">$1</span>');
+
+            let owaspBadge = '';
+            if (f.owasp_id) {
+                owaspBadge = `<span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded">${f.owasp_id}</span>`;
+            }
+
+            let cweBadge = '';
+            if (f.cwe) {
+                cweBadge = `<span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded ml-1">${f.cwe}</span>`;
+            }
+
+            let evidenceHtml = '';
+            if (f.evidence) {
+                evidenceHtml = `
+                    <div class="mt-2 p-3 bg-gray-100 rounded text-xs font-mono text-gray-700 overflow-x-auto">
+                        <strong>Evidence:</strong> ${escapeHtml(f.evidence.substring(0, 200))}${f.evidence.length > 200 ? '...' : ''}
+                    </div>
+                `;
+            }
+
+            let recommendationHtml = '';
+            if (f.recommendation && f.recommendation !== 'N/A') {
+                recommendationHtml = `
+                    <div class="mt-3 p-3 bg-blue-50 rounded border-l-4 border-blue-400">
+                        <p class="text-sm font-semibold text-blue-900">💡 Recommendation:</p>
+                        <p class="text-sm text-blue-800 mt-1">${f.recommendation}</p>
+                    </div>
+                `;
+            }
+
+            let referencesHtml = '';
+            if (f.references) {
+                referencesHtml = `
+                    <div class="mt-2">
+                        <a href="${f.references}" target="_blank" class="text-xs text-purple-600 hover:text-purple-800 underline">
+                            📚 Learn more →
+                        </a>
+                    </div>
+                `;
+            }
+
+            findingsDiv.innerHTML += `
+                <div class="border-l-4 ${config.border} ${config.bg} p-5 rounded-lg shadow-sm hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-bold ${config.text} text-lg">${config.icon} ${f.type || 'Finding'}</span>
+                            ${owaspBadge}
+                            ${cweBadge}
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text} border-2 ${config.border}">${severity}</span>
+                    </div>
+                    <div class="text-sm ${config.text} opacity-90 mb-2">${description}</div>
+                    ${evidenceHtml}
+                    ${recommendationHtml}
+                    ${referencesHtml}
+                </div>
+            `;
+        });
+    }
+
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (data.pdf_path) {
+        downloadBtn.classList.remove('hidden');
+        downloadBtn.onclick = () => {
+            const url = '/static/reports/' + encodeURIComponent(data.pdf_path);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = data.pdf_path;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        };
+    } else {
+        downloadBtn.classList.add('hidden');
+    }
+    
+    // Scroll to results
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Add styles for active tab
+const style = document.createElement('style');
+style.textContent = `
+    .tab-btn {
+        background: white;
+        color: #6b7280;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    .tab-btn.active {
+        background: linear-gradient(to right, #9333ea, #4f46e5);
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .tab-btn:hover:not(.active) {
+        background: #f3f4f6;
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+</body>
+</html>
